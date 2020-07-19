@@ -20,6 +20,12 @@ class CreateTransactionService {
     category,
   }: TransactionDTO): Promise<Transaction> {
     const transactionRepository = getCustomRepository(TransactionsRepository);
+    // validate current balance before operation
+
+    const curBalance = await transactionRepository.getBalance();
+    if (type === 'outcome' && value > curBalance.total) {
+      throw new AppError('Insuficient balance!');
+    }
 
     // Check if Category exists
     const categoryRepository = getRepository(Category);

@@ -40,14 +40,14 @@ class CreateTransactionService {
       newCategory = await categoryRepository.save(newCategory);
     }
 
-    const newTransaction = transactionRepository.create({
+    const newTransaction: Transaction = transactionRepository.create({
       title,
       type,
       value,
       category: !categoryFound ? newCategory : categoryFound,
     });
 
-    transactionRepository.save(newTransaction);
+    await transactionRepository.save(newTransaction);
 
     return newTransaction;
   }
